@@ -1,0 +1,10 @@
+body {
+  font-family: sans-serif;
+}
+
+#code {
+  padding: 8px;
+  display: block;
+  border-radius: 5px;
+  background-color: #ddd;
+}
