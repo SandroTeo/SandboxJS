@@ -22,13 +22,12 @@
 import { clientes, preencherNaTela } from './banco';
 
 const $content = document.querySelector('#content');
-document.querySelector('#btn-processar').addEventListener('click', processar);
-document
-  .querySelector('#btn-rankinkEstados')
-  .addEventListener('click', rankingEstados);
-document.querySelector('#btn-coresUnicas').addEventListener('click', ui);
+//document.querySelector('#btn-processar').addEventListener('click', processar);
 
+//document.querySelector('#btn-coresUnicas').addEventListener('click', ui);
+document.querySelector('#btn-rankinkEstados').addEventListener('click', rankingEstados);
 document.querySelector('#btn-mediaIdade').addEventListener('click', mediaIdade);
+document.querySelector('#btn-nomeComum').addEventListener('click', nomeComum);
 
 function mediaIdade() {
   const mediaIdade = clientes
@@ -46,84 +45,108 @@ function mediaIdadeUi() {
   $content.appendChild($card);
 }
 
-function rankingEstados() {
-  const estados = clientes.map((cliente) => cliente.state);
-  const estadosUnicos = Array.from(new Set(estados));
-
-  const quantidadePorEstado = [
+function nomeComum() {
+  const nomeMaisComum = clientes.map((cliente) => cliente.nome);
+  const nomesUnicos = Array.from(new Set(nomeMaisComum));
+  const quantidadePorNome = [
     // [ estado: 'RN', quantidade:10],
     // [ estado: 'PB', quantidade:10],
   ];
 
-  estadosUnicos.forEach((estado) => {
+  nomesUnicos.forEach((nome) => {
     //lista estados e a quantidade de clientes sem estar em ordem
-    const quantidade = estados.filter((estadoAtual) => estadoAtual === estado)
-      .length;
+    const quantidade = nomeMaisComum.filter(
+      (nomeAtual) => nomeAtual.split(' ')[0] === nome.split(' ')[0]
+    ).length;
 
-    console.log(estado, quantidade);
-    preencherNaTela(quantidadePorEstado);
+    console.log(nomeAtual, quantidade);
+    preencherNaTela(quantidadePorNome);
 
-    quantidadePorEstado.push({
-      estado,
+    quantidadePorNome.push({
+      nomeAtual,
       quantidade
     });
   });
 
-  const ranking = quantidadePorEstado
-    .sort((e1, e2) => {
-      if (e1.quantidade === e2.quantidade) {
-        return 0;
-      }
+  function rankingEstados() {
+    const estados = clientes.map((cliente) => cliente.state);
+    const estadosUnicos = Array.from(new Set(estados));
 
-      if (e1.quantidade < e2.quantidade) {
-        return 1;
-      } else {
-        return -1;
-      }
-    })
-    .map(
-      (estadoData, i) =>
-        `${i + 1}:  ${estadoData.estado} - Quantidade ${estadoData.quantidade}`
-    );
+    const quantidadePorEstado = [
+      // [ estado: 'RN', quantidade:10],
+      // [ estado: 'PB', quantidade:10],
+    ];
 
-  preencherNaTela(ranking);
-}
+    estadosUnicos.forEach((estado) => {
+      //lista estados e a quantidade de clientes sem estar em ordem
+      const quantidade = estados.filter((estadoAtual) => estadoAtual === estado)
+        .length;
+    
+      console.log(estado, quantidade);
+      preencherNaTela(quantidadePorEstado);
 
-function processar() {
-  const cores = clientes.map((cliente) => cliente.preferencias.cor);
-  const coresUnicas = Array.from(new Set(cores));
-  preencherNaTela(coresUnicas);
+      quantidadePorEstado.push({
+        estado,
+        quantidade
+      });
+    });
 
-  $content.textContent = `Total de Clientes : ${clientes.length}`;
-}
+    const ranking = quantidadePorEstado
+      .sort((e1, e2) => {
+        if (e1.quantidade === e2.quantidade) {
+          return 0;
+        }
 
-function CoresU() {
-  const cores = clientes.map((cliente) => cliente.preferencias.cor);
-  const $coresUnicas = Array.from(new Set(cores));
-  return $coresUnicas;
-}
+        if (e1.quantidade < e2.quantidade) {
+          return 1;
+        } else {
+          return -1;
+        }
+      })
+      .map(
+        (estadoData, i) =>
+          `${i + 1}:  ${estadoData.estado} - Quantidade ${estadoData.quantidade}`
+      );
 
-function ui() {
-  const $card = criarCard('Cores Unicas:', CoresU);
-  $content.appendChild($card);
-}
+    preencherNaTela(ranking);
+  
 
-function criarCard(header, texto) {
-  const $div = document.createElement('div');
-  $div.classList.toggle('card');
-  const $header = createHeader(header);
-  $div.appendChild($header);
 
-  text($div, 'card');
-  return $div;
-}
+  function processar() {
+    const cores = clientes.map((cliente) => cliente.preferencias.cor);
+    const coresUnicas = Array.from(new Set(cores));
+    preencherNaTela(coresUnicas);
 
-function createHeader(texto) {
-  const $header = document.createElement('h4');
-  text($header, texto);
-  return $header;
-}
+    $content.textContent = `Total de Clientes : ${clientes.length}`;
+  }
 
-function text($el, texto) {
-  $el.appendChild(document.createTextNode(texto));
-}
+  function CoresU() {
+    const cores = clientes.map((cliente) => cliente.preferencias.cor);
+    const $coresUnicas = Array.from(new Set(cores));
+    return $coresUnicas;
+  }
+
+  function ui() {
+    const $card = criarCard('Cores Unicas:', CoresU);
+    $content.appendChild($card);
+  }
+
+  function criarCard(header, texto) {
+    const $div = document.createElement('div');
+    $div.classList.toggle('card');
+    const $header = createHeader(header);
+    $div.appendChild($header);
+
+    text($div, 'card');
+    return $div;
+  }
+
+  function createHeader(texto) {
+    const $header = document.createElement('h4');
+    text($header, texto);
+    return $header;
+  }
+
+  function text($el, texto) {
+    $el.appendChild(document.createTextNode(texto));
+  }
