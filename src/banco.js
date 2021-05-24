@@ -22,24 +22,25 @@ function atualizar() {
 
 document.querySelector('#btn-atualizar').addEventListener('click', function () {
   atualizar();
+  document.querySelector('#content').innerHTML = '';
 });
 
 function criarContaBancaria() {
   return {
     nome: faker.name.findName(),
-    idade: faker.random.number({ min: 18, max: 60 }),
+    idade: faker.datatype.number({ min: 18, max: 60 }),
     image: faker.image.avatar(),
     state: faker.address.state(),
     contaBancaria: {
       saldo: faker.finance.amount(),
-      transacoes: Array(faker.random.number({ min: 3, max: 10 }))
+      transacoes: Array(faker.datatype.number({ min: 3, max: 10 }))
         .fill(0)
         .map(faker.helpers.createTransaction)
     },
     profissao: {
       cargo: faker.name.jobTitle(),
       area: faker.name.jobArea(),
-      salario: faker.random.number({ min: 1000, max: 10000 })
+      salario: faker.datatype.number({ min: 1000, max: 10000 })
     },
     preferencias: {
       cor: faker.commerce.color()
