@@ -3,7 +3,7 @@
  * - Quantidade de clientes
  * - Ranking de cores favoritas
  * - Ranking dos estados com mais quantidade de pessoas
- * - Média de idade
+ * - Média de idade ok
  * - Nome mais comum(só o primeiro)
  * - Área de profissão mais comum(só o primeiro)
  * - Menor, maior e média salarial
@@ -14,6 +14,8 @@
  * - Total de vezes que realizou pagamento (payment) e total pago
  * - Total de vezes que pediu um recibo (invoice)
  * - Total de valor transacionado (tudo)
+ * - Total de valor por cliente
+ *
  * - Renderizar a conta bancária das pessoas
  */
 
@@ -25,6 +27,24 @@ document
   .querySelector('#btn-rankinkEstados')
   .addEventListener('click', rankingEstados);
 document.querySelector('#btn-coresUnicas').addEventListener('click', ui);
+
+document.querySelector('#btn-mediaIdade').addEventListener('click', mediaIdade);
+
+function mediaIdade() {
+  const mediaIdade = clientes
+    .map((cliente) => cliente.idade)
+    .map(parseFloat)
+    .reduce((soma, idadeAtual) => soma + idadeAtual, 0);
+
+  preencherNaTela(
+    'Média de idade dos clientes = ' + mediaIdade / clientes.length
+  );
+}
+
+function mediaIdadeUi() {
+  const $card = criarCard('Media de idade:', mediaIdade);
+  $content.appendChild($card);
+}
 
 function rankingEstados() {
   const estados = clientes.map((cliente) => cliente.state);
